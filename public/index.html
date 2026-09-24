@@ -495,90 +495,90 @@
             });
         });
 
-        // ================= ÖRDEK KAFASINA TAM VE KUSURSUZ OTURAN KOSTÜMLER =================
+        // ================= TAM KAFA VE BOYUN HİZASINA OTURTULAN KOSTÜMLER =================
         function createAccessory(type) {
             const accGroup = new THREE.Group();
 
             if (type === "cowboy") {
-                // Kovboy Şapkası: Başın tepe hizası (Y: 2.36, Z: -0.48)
+                // Kovboy Şapkası (Yükseklik 1.42, Z -0.32)
                 const brownMat = new THREE.MeshStandardMaterial({ color: 0x8b4513, roughness: 0.85 });
                 const bandMat = new THREE.MeshStandardMaterial({ color: 0x3d1c02, roughness: 0.5 });
 
-                const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.52, 0.52, 0.04, 18), brownMat);
-                brim.position.set(0, 2.36, -0.48);
-                brim.rotation.x = 0.18;
+                const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.48, 0.03, 18), brownMat);
+                brim.position.set(0, 1.42, -0.32);
+                brim.rotation.x = 0.16;
                 accGroup.add(brim);
 
-                const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.32, 0.32, 16), brownMat);
-                crown.position.set(0, 2.50, -0.50);
-                crown.rotation.x = 0.18;
+                const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.30, 0.28, 16), brownMat);
+                crown.position.set(0, 1.55, -0.34);
+                crown.rotation.x = 0.16;
                 accGroup.add(crown);
 
-                const band = new THREE.Mesh(new THREE.CylinderGeometry(0.33, 0.33, 0.06, 16), bandMat);
-                band.position.set(0, 2.39, -0.49);
-                band.rotation.x = 0.18;
+                const band = new THREE.Mesh(new THREE.CylinderGeometry(0.31, 0.31, 0.05, 16), bandMat);
+                band.position.set(0, 1.45, -0.33);
+                band.rotation.x = 0.16;
                 accGroup.add(band);
             }
             else if (type === "crown") {
-                // Kral Tacı: Başın tepesine oturan altın taç
+                // Kral Tacı (Yükseklik 1.42, Z -0.32)
                 const goldMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.85, roughness: 0.2 });
-                const baseRing = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.30, 0.10, 16), goldMat);
-                baseRing.position.set(0, 2.36, -0.48);
-                baseRing.rotation.x = 0.15;
+                const baseRing = new THREE.Mesh(new THREE.CylinderGeometry(0.28, 0.28, 0.09, 16), goldMat);
+                baseRing.position.set(0, 1.42, -0.32);
+                baseRing.rotation.x = 0.14;
                 accGroup.add(baseRing);
 
                 for (let i = 0; i < 5; i++) {
-                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.20, 6), goldMat);
+                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.07, 0.18, 6), goldMat);
                     const ang = (i / 5) * Math.PI * 2;
-                    spike.position.set(Math.cos(ang) * 0.26, 2.47, Math.sin(ang) * 0.26 - 0.48);
-                    spike.rotation.x = 0.15;
+                    spike.position.set(Math.cos(ang) * 0.24, 1.52, Math.sin(ang) * 0.24 - 0.32);
+                    spike.rotation.x = 0.14;
                     accGroup.add(spike);
                 }
             }
             else if (type === "glasses") {
-                // Cool Güneş Gözlüğü: Tam gözlerin ve gaganın başladığı ön yüzey (Y: 2.05, Z: -0.85)
+                // Güneş Gözlüğü (Göz hizası: Y 1.25, Z -0.62)
                 const blackMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.2, metalness: 0.5 });
                 const glassMat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.1 });
 
-                const frameR = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.15, 0.04), glassMat);
-                frameR.position.set(0.21, 2.05, -0.86);
+                const frameR = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.13, 0.04), glassMat);
+                frameR.position.set(0.18, 1.25, -0.62);
                 frameR.rotation.y = -0.22;
                 accGroup.add(frameR);
 
-                const frameL = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.15, 0.04), glassMat);
-                frameL.position.set(-0.21, 2.05, -0.86);
+                const frameL = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.13, 0.04), glassMat);
+                frameL.position.set(-0.18, 1.25, -0.62);
                 frameL.rotation.y = 0.22;
                 accGroup.add(frameL);
 
-                const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.04, 0.03), blackMat);
-                bridge.position.set(0, 2.07, -0.87);
+                const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.04, 0.03), blackMat);
+                bridge.position.set(0, 1.26, -0.63);
                 accGroup.add(bridge);
             }
             else if (type === "scarf") {
-                // Kışlık Atkı: Baş ile gövde arasındaki boyun boğumu (Y: 1.45, Z: -0.32)
+                // Kışlık Atkı (Boyun boğumu: Y 0.82, Z -0.15)
                 const scarfMat = new THREE.MeshStandardMaterial({ color: 0xd90429, roughness: 0.85 });
-                const scarfRing = new THREE.Mesh(new THREE.TorusGeometry(0.44, 0.12, 12, 24), scarfMat);
-                scarfRing.rotation.x = Math.PI / 2 - 0.2;
-                scarfRing.position.set(0, 1.45, -0.32);
+                const scarfRing = new THREE.Mesh(new THREE.TorusGeometry(0.42, 0.10, 12, 24), scarfMat);
+                scarfRing.rotation.x = Math.PI / 2 - 0.15;
+                scarfRing.position.set(0, 0.82, -0.15);
                 accGroup.add(scarfRing);
 
-                const scarfTail = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.38, 0.08), scarfMat);
-                scarfTail.position.set(0.24, 1.25, -0.16);
-                scarfTail.rotation.set(-0.25, 0.2, -0.15);
+                const scarfTail = new THREE.Mesh(new THREE.BoxGeometry(0.15, 0.32, 0.07), scarfMat);
+                scarfTail.position.set(0.22, 0.65, -0.02);
+                scarfTail.rotation.set(-0.2, 0.2, -0.15);
                 accGroup.add(scarfTail);
             }
             else if (type === "party") {
-                // Parti Şapkası: Başın tepesinde eğlenceli külah (Y: 2.62, Z: -0.50)
+                // Parti Şapkası (Yükseklik 1.62, Z -0.34)
                 const partyMat = new THREE.MeshStandardMaterial({ color: 0x7209b7, roughness: 0.5 });
                 const pomMat = new THREE.MeshStandardMaterial({ color: 0xf72585, roughness: 0.9 });
 
-                const cone = new THREE.Mesh(new THREE.ConeGeometry(0.25, 0.65, 16), partyMat);
-                cone.position.set(0, 2.62, -0.50);
-                cone.rotation.x = 0.18;
+                const cone = new THREE.Mesh(new THREE.ConeGeometry(0.22, 0.55, 16), partyMat);
+                cone.position.set(0, 1.62, -0.34);
+                cone.rotation.x = 0.16;
                 accGroup.add(cone);
 
-                const pompom = new THREE.Mesh(new THREE.DodecahedronGeometry(0.10, 1), pomMat);
-                pompom.position.set(0, 2.98, -0.55);
+                const pompom = new THREE.Mesh(new THREE.DodecahedronGeometry(0.09, 1), pomMat);
+                pompom.position.set(0, 1.93, -0.38);
                 accGroup.add(pompom);
             }
 
@@ -615,7 +615,7 @@
             const mat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
             const sprite = new THREE.Sprite(mat);
             sprite.scale.set(3.4, 0.85, 1);
-            sprite.position.set(0, 3.8, 0); // Şapkaların üzerinden net okunacak yükseklik
+            sprite.position.set(0, 2.7, 0);
             return sprite;
         }
 
@@ -631,7 +631,7 @@
 
             playerGroup.add(createNameTag(myUsername));
 
-            // Kostüm doğrudan animasyonlu ördek gövdesine eklenir
+            // Kostümü doğrudan ördeğin gövdesine iliştir
             if (selectedHat !== "none" && playerDuckMesh) {
                 playerDuckMesh.add(createAccessory(selectedHat));
             }
@@ -977,7 +977,7 @@
             playerDuckMesh.position.y = hipHeight;
             playerGroup.add(playerDuckMesh);
 
-            // Oyun başlamışsa seçilen kostümü tak
+            // Başlangıçta seçilen kostümü ördek gövdesine iliştir
             if (isGameStarted && selectedHat !== "none") {
                 playerDuckMesh.add(createAccessory(selectedHat));
             }
