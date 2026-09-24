@@ -66,7 +66,7 @@
 
         .menu-card {
             background: #ffffff;
-            padding: 45px 65px;
+            padding: 40px 55px;
             border-radius: 45px;
             border: 8px solid #ffde59;
             box-shadow: 0 20px 0 rgba(0, 0, 0, 0.15), 0 30px 50px rgba(0, 0, 0, 0.2);
@@ -74,35 +74,37 @@
             flex-direction: column;
             align-items: center;
             position: relative;
+            max-width: 440px;
+            width: 90%;
         }
 
         .game-logo {
             font-family: 'Luckiest Guy', cursive, sans-serif;
-            font-size: 64px;
+            font-size: 58px;
             color: #ff5964;
             text-shadow: 
                 4px 4px 0 #35a7ff,
                 8px 8px 0 #ffed66,
                 12px 12px 20px rgba(0, 0, 0, 0.3);
             letter-spacing: 4px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             transform: rotate(-3deg);
             animation: wiggleLogo 2.5s infinite ease-in-out;
         }
 
         .nickname-input {
             font-family: 'Fredoka One', cursive, sans-serif;
-            font-size: 20px;
+            font-size: 19px;
             text-align: center;
             color: #2b2d42;
             background: #f8f9fa;
             border: 4px solid #ffd166;
             border-radius: 25px;
-            padding: 12px 20px;
+            padding: 10px 18px;
             width: 100%;
             outline: none;
-            margin-bottom: 25px;
-            box-shadow: inset 0 3px 6px rgba(0,0,0,0.1);
+            margin-bottom: 18px;
+            box-shadow: inset 0 3px 6px rgba(0,0,0,0.08);
         }
 
         .nickname-input:focus {
@@ -110,15 +112,58 @@
             background: #ffffff;
         }
 
+        /* Gardırop / Aksesuar Seçim Alanı */
+        .wardrobe-label {
+            font-size: 13px;
+            letter-spacing: 1px;
+            color: #8d99ae;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .wardrobe-container {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 22px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .hat-option {
+            width: 50px;
+            height: 50px;
+            border-radius: 16px;
+            background: #f1f5f9;
+            border: 3px solid #cbd5e1;
+            font-size: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.15s ease;
+        }
+
+        .hat-option:hover {
+            transform: translateY(-3px) scale(1.1);
+            background: #e2e8f0;
+        }
+
+        .hat-option.active {
+            border-color: #ff9f1c;
+            background: #fff3bf;
+            box-shadow: 0 4px 10px rgba(255, 159, 28, 0.4);
+            transform: scale(1.12);
+        }
+
         .play-btn {
             font-family: 'Luckiest Guy', cursive, sans-serif;
-            font-size: 34px;
+            font-size: 32px;
             letter-spacing: 2px;
             color: #ffffff;
             background: linear-gradient(180deg, #38b000 0%, #2b9348 100%);
             border: 5px solid #ffffff;
             border-radius: 36px;
-            padding: 14px 65px;
+            padding: 12px 60px;
             cursor: pointer;
             box-shadow: 0 10px 0 #1b4332, 0 16px 25px rgba(56, 176, 0, 0.45);
             transition: transform 0.1s ease, box-shadow 0.1s ease;
@@ -138,14 +183,14 @@
             position: absolute;
             top: -22px;
             right: -22px;
-            width: 65px;
-            height: 65px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: linear-gradient(180deg, #ff9f1c 0%, #e65100 100%);
             border: 5px solid #ffffff;
             color: #ffffff;
             font-family: 'Luckiest Guy', cursive;
-            font-size: 36px;
+            font-size: 32px;
             cursor: pointer;
             display: flex;
             align-items: center;
@@ -359,13 +404,24 @@
 <body>
     <div id="game-container"></div>
 
-    <!-- Fall Guys Tarzı Giriş Ekranı (İsim Kutusuyla Birlikte) -->
+    <!-- Fall Guys Tarzı Giriş Ekranı (İsim ve Kostüm Seçimli) -->
     <div id="start-screen">
         <div class="menu-wrapper">
             <div class="menu-card">
                 <button id="help-button" class="help-btn" title="Nasıl Oynanır?">?</button>
                 <h1 class="game-logo">DUCK DUCK</h1>
                 <input id="nickname-input" class="nickname-input" type="text" placeholder="İsmini Yaz..." maxlength="12" autofocus />
+                
+                <span class="wardrobe-label">KOSTÜMÜNÜ SEÇ</span>
+                <div class="wardrobe-container">
+                    <div class="hat-option active" data-hat="none" title="Sade">🐥</div>
+                    <div class="hat-option" data-hat="cowboy" title="Kovboy Şapkası">🤠</div>
+                    <div class="hat-option" data-hat="crown" title="Kral Tacı">👑</div>
+                    <div class="hat-option" data-hat="glasses" title="Gözlük">😎</div>
+                    <div class="hat-option" data-hat="scarf" title="Kışlık Atkı">🧣</div>
+                    <div class="hat-option" data-hat="party" title="Parti Şapkası">🎉</div>
+                </div>
+
                 <button id="start-button" class="play-btn">OYNA</button>
             </div>
         </div>
@@ -426,9 +482,108 @@
         const helpBtn = document.getElementById("help-button");
         const helpModal = document.getElementById("help-modal");
         const closeHelpBtn = document.getElementById("close-help-button");
+        const hatOptions = document.querySelectorAll(".hat-option");
 
         let isGameStarted = false;
         let myUsername = "Misafir";
+        let selectedHat = "none";
+
+        // Gardırop Seçimi
+        hatOptions.forEach(opt => {
+            opt.addEventListener("click", () => {
+                hatOptions.forEach(o => o.classList.remove("active"));
+                opt.classList.add("active");
+                selectedHat = opt.getAttribute("data-hat");
+            });
+        });
+
+        // ================= 3D AKSESUARLAR / KIYAFETLER =================
+        function createAccessory(type) {
+            const accGroup = new THREE.Group();
+
+            if (type === "cowboy") {
+                // Kovboy Şapkası
+                const brownMat = new THREE.MeshStandardMaterial({ color: 0x8b4513, roughness: 0.8 });
+                const bandMat = new THREE.MeshStandardMaterial({ color: 0x2b1704, roughness: 0.5 });
+
+                const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.9, 0.9, 0.05, 18), brownMat);
+                brim.position.y = 1.62;
+                brim.rotation.x = -0.1;
+                accGroup.add(brim);
+
+                const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.45, 0.52, 0.45, 16), brownMat);
+                crown.position.set(0, 1.84, -0.02);
+                crown.rotation.x = -0.1;
+                accGroup.add(crown);
+
+                const band = new THREE.Mesh(new THREE.CylinderGeometry(0.53, 0.53, 0.08, 16), bandMat);
+                band.position.set(0, 1.66, -0.01);
+                band.rotation.x = -0.1;
+                accGroup.add(band);
+            }
+            else if (type === "crown") {
+                // Kral Tacı
+                const goldMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.8, roughness: 0.2 });
+                const baseRing = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.48, 0.14, 16), goldMat);
+                baseRing.position.y = 1.65;
+                accGroup.add(baseRing);
+
+                for (let i = 0; i < 5; i++) {
+                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.28, 6), goldMat);
+                    const ang = (i / 5) * Math.PI * 2;
+                    spike.position.set(Math.cos(ang) * 0.42, 1.82, Math.sin(ang) * 0.42);
+                    accGroup.add(spike);
+                }
+            }
+            else if (type === "glasses") {
+                // Cool Siyah Güneş Gözlüğü
+                const blackMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.2, metalness: 0.6 });
+                const glassMat = new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.1 });
+
+                const frameR = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.22, 0.06), glassMat);
+                frameR.position.set(0.24, 1.35, -0.66);
+                frameR.rotation.y = 0.15;
+                accGroup.add(frameR);
+
+                const frameL = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.22, 0.06), glassMat);
+                frameL.position.set(-0.24, 1.35, -0.66);
+                frameL.rotation.y = -0.15;
+                accGroup.add(frameL);
+
+                const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.05, 0.05), blackMat);
+                bridge.position.set(0, 1.37, -0.66);
+                accGroup.add(bridge);
+            }
+            else if (type === "scarf") {
+                // Kışlık Kırmızı Atkı
+                const scarfMat = new THREE.MeshStandardMaterial({ color: 0xd90429, roughness: 0.9 });
+                const scarfRing = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.14, 12, 24), scarfMat);
+                scarfRing.rotation.x = Math.PI / 2 + 0.1;
+                scarfRing.position.set(0, 1.05, -0.05);
+                accGroup.add(scarfRing);
+
+                const scarfTail = new THREE.Mesh(new THREE.BoxGeometry(0.24, 0.45, 0.12), scarfMat);
+                scarfTail.position.set(0.32, 0.85, 0.52);
+                scarfTail.rotation.set(0.2, 0.3, -0.2);
+                accGroup.add(scarfTail);
+            }
+            else if (type === "party") {
+                // Renkli Parti Şapkası
+                const partyMat = new THREE.MeshStandardMaterial({ color: 0x7209b7, roughness: 0.5 });
+                const pomMat = new THREE.MeshStandardMaterial({ color: 0xf72585, roughness: 0.9 });
+
+                const cone = new THREE.Mesh(new THREE.ConeGeometry(0.42, 0.9, 16), partyMat);
+                cone.position.set(0, 1.95, -0.05);
+                cone.rotation.x = -0.15;
+                accGroup.add(cone);
+
+                const pompom = new THREE.Mesh(new THREE.DodecahedronGeometry(0.14, 1), pomMat);
+                pompom.position.set(0, 2.45, -0.12);
+                accGroup.add(pompom);
+            }
+
+            return accGroup;
+        }
 
         // ================= 3D İSİM ETİKETİ (SPRITE TEXT) =================
         function createNameTag(name) {
@@ -460,7 +615,7 @@
             const mat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
             const sprite = new THREE.Sprite(mat);
             sprite.scale.set(3.4, 0.85, 1);
-            sprite.position.set(0, 2.6, 0);
+            sprite.position.set(0, 2.7, 0);
             return sprite;
         }
 
@@ -474,11 +629,14 @@
             startScreen.classList.add("hidden");
             isGameStarted = true;
 
-            // Kendi ördeğimizin kafasına isim etiketini koy
+            // Kendi ördeğimizin kafasına isim etiketini ve seçilen aksesuarı iliştir
             playerGroup.add(createNameTag(myUsername));
+            if (selectedHat !== "none") {
+                playerGroup.add(createAccessory(selectedHat));
+            }
 
-            // Sunucuya ismimizi ve girişimizi bildir
-            socket.emit("joinGame", myUsername);
+            // Sunucuya ismimizi ve seçtiğimiz kostümü bildir
+            socket.emit("joinGame", { username: myUsername, hat: selectedHat });
         }
 
         startBtn.addEventListener("click", handleStartGame);
@@ -850,9 +1008,13 @@
                 pGroup.add(otherMesh);
             }
 
-            // Kafasının üstüne isim etiketini ekle
+            // Gelen oyuncunun kafasına ismini ve seçtiği kostümü koy
             const nameTag = createNameTag(playerInfo.username || "Ördek");
             pGroup.add(nameTag);
+
+            if (playerInfo.hat && playerInfo.hat !== "none") {
+                pGroup.add(createAccessory(playerInfo.hat));
+            }
 
             scene.add(pGroup);
             otherPlayers[playerInfo.id] = {
@@ -1005,6 +1167,13 @@
             const bRightFoot = createDuckFoot();
             bRightFoot.position.set(legSpacingX, hipHeight, 0);
             botGroup.add(bRightFoot);
+
+            // Botlara da rastgele tatlı aksesuarlar takalım
+            const botHats = ["cowboy", "crown", "party", "scarf", "glasses", "none"];
+            const randomHat = botHats[Math.floor(Math.random() * botHats.length)];
+            if (randomHat !== "none") {
+                botGroup.add(createAccessory(randomHat));
+            }
 
             scene.add(botGroup);
 
@@ -1312,20 +1481,17 @@
                 footShadow.scale.setScalar(1.0 + bobHeight * 0.5);
             } 
             // ==============================================================
-            // DAHA SAKİN VE DENGELİ PAYTAK YÜRÜYÜŞ
+            // SAKİN VE DENGELİ PAYTAK YÜRÜYÜŞ
             // ==============================================================
             else if (isMoving) {
                 wiggleCycle = 0;
-                // Ayak adım hızı ördeğe uygun şekilde yavaşlatıldı (0.11 / depar: 0.18)
                 const stepSpeed = isSprinting ? 0.18 : 0.11;
                 playerWalkCycle += stepSpeed;
 
-                // Ayakların ileri-geri savrulması dengelendi
                 const legSwing = Math.sin(playerWalkCycle) * (isSprinting ? 0.55 : 0.40);
                 playerLeftFoot.rotation.x = legSwing;
                 playerRightFoot.rotation.x = -legSwing;
 
-                // Adım kalkış yüksekliği hafifletildi
                 playerLeftFoot.position.y = hipHeight + Math.max(0, Math.sin(playerWalkCycle)) * 0.10;
                 playerRightFoot.position.y = hipHeight + Math.max(0, -Math.sin(playerWalkCycle)) * 0.10;
 
