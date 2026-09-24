@@ -1311,27 +1311,33 @@
 
                 footShadow.scale.setScalar(1.0 + bobHeight * 0.5);
             } 
+            // ==============================================================
+            // DAHA SAKİN VE DENGELİ PAYTAK YÜRÜYÜŞ
+            // ==============================================================
             else if (isMoving) {
                 wiggleCycle = 0;
-                const stepSpeed = isSprinting ? 0.30 : 0.20;
+                // Ayak adım hızı ördeğe uygun şekilde yavaşlatıldı (0.11 / depar: 0.18)
+                const stepSpeed = isSprinting ? 0.18 : 0.11;
                 playerWalkCycle += stepSpeed;
 
-                const legSwing = Math.sin(playerWalkCycle) * (isSprinting ? 0.80 : 0.60);
+                // Ayakların ileri-geri savrulması dengelendi
+                const legSwing = Math.sin(playerWalkCycle) * (isSprinting ? 0.55 : 0.40);
                 playerLeftFoot.rotation.x = legSwing;
                 playerRightFoot.rotation.x = -legSwing;
 
-                playerLeftFoot.position.y = hipHeight + Math.max(0, Math.sin(playerWalkCycle)) * 0.16;
-                playerRightFoot.position.y = hipHeight + Math.max(0, -Math.sin(playerWalkCycle)) * 0.16;
+                // Adım kalkış yüksekliği hafifletildi
+                playerLeftFoot.position.y = hipHeight + Math.max(0, Math.sin(playerWalkCycle)) * 0.10;
+                playerRightFoot.position.y = hipHeight + Math.max(0, -Math.sin(playerWalkCycle)) * 0.10;
 
                 if (playerDuckMesh && !isPecking) {
-                    const waddleAngle = Math.sin(playerWalkCycle) * (isSprinting ? 0.22 : 0.15);
-                    playerDuckMesh.rotation.z = THREE.MathUtils.lerp(playerDuckMesh.rotation.z, waddleAngle + bodyRoll, 0.35);
+                    const waddleAngle = Math.sin(playerWalkCycle) * (isSprinting ? 0.18 : 0.12);
+                    playerDuckMesh.rotation.z = THREE.MathUtils.lerp(playerDuckMesh.rotation.z, waddleAngle + bodyRoll, 0.25);
                     playerDuckMesh.rotation.y = 0;
-                    playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, (isSprinting ? 0.20 : 0.08), 0.3);
-                    playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY + Math.abs(Math.sin(playerWalkCycle)) * 0.12, 0.3);
+                    playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, (isSprinting ? 0.16 : 0.06), 0.25);
+                    playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY + Math.abs(Math.sin(playerWalkCycle)) * 0.08, 0.25);
                 }
 
-                footShadow.scale.setScalar(1.0 - Math.abs(Math.sin(playerWalkCycle)) * 0.12);
+                footShadow.scale.setScalar(1.0 - Math.abs(Math.sin(playerWalkCycle)) * 0.08);
             } else {
                 wiggleCycle = 0;
                 playerLeftFoot.rotation.x = THREE.MathUtils.lerp(playerLeftFoot.rotation.x, 0, 0.25);
@@ -1533,16 +1539,16 @@
                         b.group.position.x -= Math.sin(b.angle) * (b.speed * 2.3);
                         b.group.position.z -= Math.cos(b.angle) * (b.speed * 2.3);
 
-                        b.walkCycle += 0.30;
-                        const bLegSwing = Math.sin(b.walkCycle) * 0.80;
+                        b.walkCycle += 0.22;
+                        const bLegSwing = Math.sin(b.walkCycle) * 0.65;
                         b.leftFoot.rotation.x = bLegSwing;
                         b.rightFoot.rotation.x = -bLegSwing;
 
-                        b.leftFoot.position.y = hipHeight + Math.max(0, Math.sin(b.walkCycle)) * 0.16;
-                        b.rightFoot.position.y = hipHeight + Math.max(0, -Math.sin(b.walkCycle)) * 0.16;
+                        b.leftFoot.position.y = hipHeight + Math.max(0, Math.sin(b.walkCycle)) * 0.12;
+                        b.rightFoot.position.y = hipHeight + Math.max(0, -Math.sin(b.walkCycle)) * 0.12;
 
-                        b.mesh.rotation.z = Math.sin(b.walkCycle) * 0.22;
-                        b.mesh.position.y = botTargetBaseY + Math.abs(Math.sin(b.walkCycle)) * 0.12;
+                        b.mesh.rotation.z = Math.sin(b.walkCycle) * 0.18;
+                        b.mesh.position.y = botTargetBaseY + Math.abs(Math.sin(b.walkCycle)) * 0.09;
                     } else {
                         b.isPeckingBack = true;
                         b.peckBackTimer = 12;
@@ -1584,16 +1590,16 @@
                     b.group.position.z -= Math.cos(b.angle) * b.speed;
                     b.group.rotation.y = b.angle;
 
-                    b.walkCycle += 0.14;
-                    const bLegSwing = Math.sin(b.walkCycle) * 0.55;
+                    b.walkCycle += 0.11;
+                    const bLegSwing = Math.sin(b.walkCycle) * 0.40;
                     b.leftFoot.rotation.x = bLegSwing;
                     b.rightFoot.rotation.x = -bLegSwing;
 
-                    b.leftFoot.position.y = hipHeight + Math.max(0, Math.sin(b.walkCycle)) * 0.12;
-                    b.rightFoot.position.y = hipHeight + Math.max(0, -Math.sin(b.walkCycle)) * 0.12;
+                    b.leftFoot.position.y = hipHeight + Math.max(0, Math.sin(b.walkCycle)) * 0.10;
+                    b.rightFoot.position.y = hipHeight + Math.max(0, -Math.sin(b.walkCycle)) * 0.10;
 
-                    b.mesh.rotation.z = Math.sin(b.walkCycle) * 0.14;
-                    b.mesh.position.y = botTargetBaseY + Math.abs(Math.sin(b.walkCycle)) * 0.08;
+                    b.mesh.rotation.z = Math.sin(b.walkCycle) * 0.12;
+                    b.mesh.position.y = botTargetBaseY + Math.abs(Math.sin(b.walkCycle)) * 0.06;
                 }
 
                 if (b.isPeckingBack) {
