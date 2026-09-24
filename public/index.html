@@ -495,8 +495,8 @@
             });
         });
 
-        // ================= KAFANIN TAM ÜZERİNE İNDİRİLMİŞ AKSESUARLAR =================
-        // Ördeğin baş tepe noktası: hipHeight (0.72) + baş yüksekliği (1.35) = yaklaşık 2.05 birimdir.
+        // ================= KAFANIN TAM ÜZERİNE OTURAN DOĞRU BOYUTLU KOSTÜMLER =================
+        // Ördeğin baş tepe noktası Y = 2.55, Z = 0.05
         function createAccessory(type) {
             const accGroup = new THREE.Group();
 
@@ -504,33 +504,33 @@
                 const brownMat = new THREE.MeshStandardMaterial({ color: 0x8b4513, roughness: 0.85 });
                 const bandMat = new THREE.MeshStandardMaterial({ color: 0x3d1c02, roughness: 0.5 });
 
-                const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.04, 18), brownMat);
-                brim.position.set(0, 2.08, -0.15);
-                brim.rotation.x = 0.15;
+                const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.85, 0.85, 0.06, 20), brownMat);
+                brim.position.set(0, 2.55, 0.05);
+                brim.rotation.x = -0.10;
                 accGroup.add(brim);
 
-                const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.30, 0.35, 0.28, 16), brownMat);
-                crown.position.set(0, 2.22, -0.18);
-                crown.rotation.x = 0.15;
+                const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.48, 0.54, 0.45, 18), brownMat);
+                crown.position.set(0, 2.76, 0.02);
+                crown.rotation.x = -0.10;
                 accGroup.add(crown);
 
-                const band = new THREE.Mesh(new THREE.CylinderGeometry(0.36, 0.36, 0.06, 16), bandMat);
-                band.position.set(0, 2.12, -0.16);
-                band.rotation.x = 0.15;
+                const band = new THREE.Mesh(new THREE.CylinderGeometry(0.55, 0.55, 0.08, 18), bandMat);
+                band.position.set(0, 2.60, 0.04);
+                band.rotation.x = -0.10;
                 accGroup.add(band);
             }
             else if (type === "crown") {
                 const goldMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.85, roughness: 0.2 });
-                const baseRing = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.09, 16), goldMat);
-                baseRing.position.set(0, 2.08, -0.15);
-                baseRing.rotation.x = 0.14;
+                const baseRing = new THREE.Mesh(new THREE.CylinderGeometry(0.50, 0.50, 0.14, 18), goldMat);
+                baseRing.position.set(0, 2.55, 0.05);
+                baseRing.rotation.x = -0.10;
                 accGroup.add(baseRing);
 
                 for (let i = 0; i < 5; i++) {
-                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.08, 0.20, 6), goldMat);
+                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.12, 0.32, 6), goldMat);
                     const ang = (i / 5) * Math.PI * 2;
-                    spike.position.set(Math.cos(ang) * 0.28, 2.20, Math.sin(ang) * 0.28 - 0.15);
-                    spike.rotation.x = 0.14;
+                    spike.position.set(Math.cos(ang) * 0.42, 2.72, Math.sin(ang) * 0.42 + 0.05);
+                    spike.rotation.x = -0.10;
                     accGroup.add(spike);
                 }
             }
@@ -538,43 +538,43 @@
                 const blackMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.2, metalness: 0.5 });
                 const glassMat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.1 });
 
-                const frameR = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.14, 0.04), glassMat);
-                frameR.position.set(0.20, 1.88, -0.52);
-                frameR.rotation.y = -0.22;
+                const frameR = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.22, 0.06), glassMat);
+                frameR.position.set(0.30, 2.30, -0.45);
+                frameR.rotation.y = 0.20;
                 accGroup.add(frameR);
 
-                const frameL = new THREE.Mesh(new THREE.BoxGeometry(0.22, 0.14, 0.04), glassMat);
-                frameL.position.set(-0.20, 1.88, -0.52);
-                frameL.rotation.y = 0.22;
+                const frameL = new THREE.Mesh(new THREE.BoxGeometry(0.32, 0.22, 0.06), glassMat);
+                frameL.position.set(-0.30, 2.30, -0.45);
+                frameL.rotation.y = -0.20;
                 accGroup.add(frameL);
 
-                const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.14, 0.04, 0.03), blackMat);
-                bridge.position.set(0, 1.89, -0.53);
+                const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.20, 0.06, 0.04), blackMat);
+                bridge.position.set(0, 2.32, -0.46);
                 accGroup.add(bridge);
             }
             else if (type === "scarf") {
                 const scarfMat = new THREE.MeshStandardMaterial({ color: 0xd90429, roughness: 0.85 });
-                const scarfRing = new THREE.Mesh(new THREE.TorusGeometry(0.48, 0.12, 12, 24), scarfMat);
-                scarfRing.rotation.x = Math.PI / 2 - 0.15;
-                scarfRing.position.set(0, 1.35, -0.05);
+                const scarfRing = new THREE.Mesh(new THREE.TorusGeometry(0.68, 0.16, 14, 28), scarfMat);
+                scarfRing.rotation.x = Math.PI / 2 + 0.15;
+                scarfRing.position.set(0, 1.55, 0.10);
                 accGroup.add(scarfRing);
 
-                const scarfTail = new THREE.Mesh(new THREE.BoxGeometry(0.18, 0.36, 0.08), scarfMat);
-                scarfTail.position.set(0.26, 1.15, 0.10);
-                scarfTail.rotation.set(-0.2, 0.2, -0.15);
+                const scarfTail = new THREE.Mesh(new THREE.BoxGeometry(0.25, 0.52, 0.12), scarfMat);
+                scarfTail.position.set(0.38, 1.25, 0.45);
+                scarfTail.rotation.set(0.20, 0.25, -0.15);
                 accGroup.add(scarfTail);
             }
             else if (type === "party") {
                 const partyMat = new THREE.MeshStandardMaterial({ color: 0x7209b7, roughness: 0.5 });
                 const pomMat = new THREE.MeshStandardMaterial({ color: 0xf72585, roughness: 0.9 });
 
-                const cone = new THREE.Mesh(new THREE.ConeGeometry(0.25, 0.55, 16), partyMat);
-                cone.position.set(0, 2.32, -0.16);
-                cone.rotation.x = 0.15;
+                const cone = new THREE.Mesh(new THREE.ConeGeometry(0.40, 0.95, 18), partyMat);
+                cone.position.set(0, 2.95, 0.02);
+                cone.rotation.x = -0.12;
                 accGroup.add(cone);
 
-                const pompom = new THREE.Mesh(new THREE.DodecahedronGeometry(0.10, 1), pomMat);
-                pompom.position.set(0, 2.62, -0.20);
+                const pompom = new THREE.Mesh(new THREE.DodecahedronGeometry(0.16, 1), pomMat);
+                pompom.position.set(0, 3.48, -0.04);
                 accGroup.add(pompom);
             }
 
@@ -611,7 +611,7 @@
             const mat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
             const sprite = new THREE.Sprite(mat);
             sprite.scale.set(3.4, 0.85, 1);
-            sprite.position.set(0, 2.85, 0);
+            sprite.position.set(0, 3.85, 0); // Şapkanın üzerinden net okunacak yükseklik
             return sprite;
         }
 
@@ -627,7 +627,6 @@
 
             playerGroup.add(createNameTag(myUsername));
 
-            // Aksesuarı doğrudan playerGroup içine koyuyoruz (Havada kalmaz!)
             if (selectedHat !== "none") {
                 playerGroup.add(createAccessory(selectedHat));
             }
