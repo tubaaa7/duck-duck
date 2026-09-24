@@ -379,7 +379,7 @@
                 🕹️ <b>W / S:</b> İleri / Geri Yürü<br>
                 🔄 <b>A / D:</b> Yumuşakça Yönel<br>
                 ⚡ <b>Shift:</b> Hızlı Koş (Depar)<br>
-                🍑 <b>Q:</b> Popo Salla (Wiggle)<br>
+                🍑 <b>Q:</b> Popo Salla (Twerk & Wiggle)<br>
                 💥 <b>E:</b> Botlara Gaga At / Sataş!<br>
                 🐥 <b>Space:</b> Lastik Ördek Fırlat (2 Coin = 1 Ördek)
             </div>
@@ -1288,25 +1288,28 @@
             const targetBaseY = inPond ? 0.28 : hipHeight;
 
             // ==============================================================
-            // YAVAŞ VE SADECE POPO SALLAMA (WIGGLE) ANİMASYONU
+            // GELİŞMİŞ POPO SALLAMA (HEM SAĞA-SOLA HEM AŞAĞI-YUKARI)
             // ==============================================================
             if (danceTimer > 0) {
                 danceTimer--;
-                wiggleCycle += 0.28;
+                wiggleCycle += 0.35;
+
+                const bobPitch = Math.sin(wiggleCycle * 2) * 0.18 + 0.12; 
+                const bobHeight = Math.abs(Math.sin(wiggleCycle * 2)) * 0.22;
 
                 playerLeftFoot.rotation.x = THREE.MathUtils.lerp(playerLeftFoot.rotation.x, 0, 0.3);
                 playerRightFoot.rotation.x = THREE.MathUtils.lerp(playerRightFoot.rotation.x, 0, 0.3);
-                playerLeftFoot.position.y = hipHeight;
-                playerRightFoot.position.y = hipHeight;
+                playerLeftFoot.position.y = hipHeight - bobHeight * 0.3;
+                playerRightFoot.position.y = hipHeight - bobHeight * 0.3;
 
                 if (playerDuckMesh) {
-                    playerDuckMesh.rotation.y = Math.sin(wiggleCycle) * 0.16;
-                    playerDuckMesh.rotation.z = Math.cos(wiggleCycle * 2) * 0.04;
-                    playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, 0, 0.2);
-                    playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY, 0.2);
+                    playerDuckMesh.rotation.y = Math.sin(wiggleCycle) * 0.28;
+                    playerDuckMesh.rotation.z = Math.cos(wiggleCycle) * 0.12;
+                    playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, bobPitch, 0.3);
+                    playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY + bobHeight, 0.3);
                 }
 
-                footShadow.scale.setScalar(1.0);
+                footShadow.scale.setScalar(1.0 + bobHeight * 0.5);
             } 
             else if (isMoving) {
                 wiggleCycle = 0;
