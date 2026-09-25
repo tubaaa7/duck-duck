@@ -714,7 +714,6 @@
             canvas.height = 96;
             const ctx = canvas.getContext("2d");
 
-            // Çizgi film konuşma balonu
             ctx.fillStyle = "#ffffff";
             ctx.strokeStyle = "#ff5964";
             ctx.lineWidth = 6;
@@ -725,7 +724,6 @@
             ctx.fill();
             ctx.stroke();
 
-            // Balon kuyruğu
             ctx.beginPath();
             ctx.moveTo(110, 75);
             ctx.lineTo(128, 92);
@@ -733,7 +731,6 @@
             ctx.fillStyle = "#ffffff";
             ctx.fill();
 
-            // Metin
             ctx.font = "bold 26px 'Luckiest Guy', sans-serif";
             ctx.fillStyle = "#e63946";
             ctx.textAlign = "center";
@@ -1296,16 +1293,14 @@
             }
         }
 
-        // ================= KANATLA TARTIŞMA / SATAŞMA HAMLESİ =================
         function performWingArgue() {
             if (!isGameStarted || argueCooldown > 0 || isArguing) return;
 
             danceTimer = 0;
             isArguing = true;
-            argueTimer = 24; // 24 frame boyunca hararetli tartışma animasyonu
+            argueTimer = 24;
             argueCooldown = 32;
 
-            // Kendi kafamızda hemen tartışma baloncuğu aç
             spawnQuackBubble(playerGroup);
 
             const forwardX = -Math.sin(duckAngle);
@@ -1320,12 +1315,10 @@
                     const pushDirZ = bot.group.position.z - playerGroup.position.z;
                     const len = Math.hypot(pushDirX, pushDirZ) || 1;
 
-                    // Kanatla hafifçe geri itme (şakalaşma)
                     bot.pushVelocityX = (pushDirX / len) * 1.15;
                     bot.pushVelocityZ = (pushDirZ / len) * 1.15;
                     bot.spinVelocity = 0.25;
 
-                    // Bot da geri dönüp kanat çırparak tartışmaya girsin!
                     bot.isArguingBack = true;
                     bot.argueBackTimer = 35;
                     bot.targetAngle = Math.atan2(-pushDirX, -pushDirZ);
@@ -1468,7 +1461,6 @@
                 if (c.position.x > arenaSize / 2 + 20) c.position.x = -arenaSize / 2 - 20;
             });
 
-            // Konuşma baloncuklarını yukarı doğru hafif süzdür ve söndür
             for (let i = chatBubbles.length - 1; i >= 0; i--) {
                 const cb = chatBubbles[i];
                 cb.sprite.position.y += 0.015;
@@ -1481,20 +1473,23 @@
 
             if (argueCooldown > 0) argueCooldown--;
 
-            // ================= TARTIŞMA ANİMASYONU (KANAT SAVURMA VE KAFA SALLAMA) =================
+            // ================= TARTIŞMA ANİMASYONU VE DOĞAL POZİSYONA DÖNÜŞ =================
             if (isArguing) {
                 argueTimer--;
                 const arguePhase = Math.sin(argueTimer * 0.8);
 
-                // Tek kanat belinde, sağ kanat öne doğru savrularak laf anlatıyor
-                playerDuckData.leftWing.rotation.set(0.4, 0, 0.45); // Sol kanat belde
-                playerDuckData.rightWing.rotation.set(-0.6 + arguePhase * 0.5, 0.3, -0.6); // Sağ kanat hararetle savruluyor
-                playerDuckData.headGroup.rotation.x = arguePhase * 0.25; // Kafa "vak vak" diye sallanıyor
-                playerDuckMesh.rotation.y = duckAngle + arguePhase * 0.15; // Gövde hafifçe atışıyor
+                // Sol kanat belde, sağ kanat öne doğru savrularak laf anlatıyor
+                playerDuckData.leftWing.rotation.set(0.4, 0, 0.45);
+                playerDuckData.rightWing.rotation.set(-0.6 + arguePhase * 0.5, 0.3, -0.6);
+                playerDuckData.headGroup.rotation.x = arguePhase * 0.25;
+                playerDuckMesh.rotation.y = duckAngle + arguePhase * 0.15;
 
                 if (argueTimer <= 0) {
                     isArguing = false;
-                    playerDuckData.headGroup.rotation.x = 0;
+                    // Bittiğinde tam sıfırlayarak normal haline dönmesini sağlıyoruz
+                    playerDuckData.headGroup.rotation.set(0, 0, 0);
+                    playerDuckData.leftWing.rotation.set(0, 0, 0);
+                    playerDuckData.rightWing.rotation.set(0, 0, 0);
                 }
             }
 
@@ -1572,11 +1567,10 @@
                 playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, bobPitch, 0.3);
                 playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY + bobHeight, 0.3);
 
-                // Dans ederken iki kanat da neşeyle çırpınır
                 if (!isArguing) {
                     const wingFlap = Math.sin(wiggleCycle * 2.4) * 0.65 + 0.45;
-                    playerDuckData.leftWing.rotation.z = wingFlap;
-                    playerDuckData.rightWing.rotation.z = -wingFlap;
+                    playerDuckData.leftWing.rotation.set(0, 0, wingFlap);
+                    playerDuckData.rightWing.rotation.set(0, 0, -wingFlap);
                 }
 
                 footShadow.scale.setScalar(1.0 + bobHeight * 0.5);
@@ -1603,6 +1597,10 @@
                 if (!isArguing) {
                     const runWingSpread = isSprinting ? 0.35 : 0.12;
                     const wingSway = Math.sin(playerWalkCycle * 1.4) * (isSprinting ? 0.18 : 0.06);
+                    playerDuckData.leftWing.rotation.x = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.x, 0, 0.2);
+                    playerDuckData.rightWing.rotation.x = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.x, 0, 0.2);
+                    playerDuckData.leftWing.rotation.y = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.y, 0, 0.2);
+                    playerDuckData.rightWing.rotation.y = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.y, 0, 0.2);
                     playerDuckData.leftWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.z, runWingSpread + wingSway, 0.2);
                     playerDuckData.rightWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.z, -runWingSpread - wingSway, 0.2);
                 }
@@ -1621,8 +1619,13 @@
                 playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY, 0.25);
 
                 if (!isArguing) {
-                    playerDuckData.leftWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.z, 0.05, 0.15);
-                    playerDuckData.rightWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.z, -0.05, 0.15);
+                    playerDuckData.leftWing.rotation.x = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.x, 0, 0.2);
+                    playerDuckData.leftWing.rotation.y = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.y, 0, 0.2);
+                    playerDuckData.leftWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.z, 0.05, 0.2);
+
+                    playerDuckData.rightWing.rotation.x = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.x, 0, 0.2);
+                    playerDuckData.rightWing.rotation.y = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.y, 0, 0.2);
+                    playerDuckData.rightWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.z, -0.05, 0.2);
                 }
 
                 footShadow.scale.setScalar(1.0);
@@ -1785,7 +1788,7 @@
                 }
             }
 
-            // ================= BOT DAVRANIŞLARI VE KARŞILIKLI TARTIŞMA =================
+            // ================= BOT DAVRANIŞLARI VE KANATLARIN NORMAL DURUŞU =================
             bots.forEach(b => {
                 const botInPond = Math.hypot(b.group.position.x, b.group.position.z) < pondRadius - 1.0;
                 const botTargetBaseY = botInPond ? 0.28 : hipHeight;
@@ -1800,7 +1803,6 @@
                     b.spinVelocity *= 0.9;
                 } 
                 else if (b.isArguingBack) {
-                    // Bot da sana karşı kanatlarını çırpıp laf yetiştiriyor!
                     b.argueBackTimer--;
                     const botArguePhase = Math.sin(b.argueBackTimer * 0.9);
                     
@@ -1808,9 +1810,12 @@
                     b.duckData.rightWing.rotation.z = -0.5 - botArguePhase * 0.4;
                     b.duckData.headGroup.rotation.x = botArguePhase * 0.3;
 
+                    // Bot tartışması bittiğinde kanatlarını ve kafasını doğal haline getirir
                     if (b.argueBackTimer <= 0) {
                         b.isArguingBack = false;
-                        b.duckData.headGroup.rotation.x = 0;
+                        b.duckData.headGroup.rotation.set(0, 0, 0);
+                        b.duckData.leftWing.rotation.set(0, 0, 0.08);
+                        b.duckData.rightWing.rotation.set(0, 0, -0.08);
                     }
                 }
                 else {
@@ -1840,8 +1845,9 @@
                     b.duckData.root.rotation.z = Math.sin(b.walkCycle) * 0.12;
                     b.duckData.root.position.y = botTargetBaseY + Math.abs(Math.sin(b.walkCycle)) * 0.06;
 
-                    b.duckData.leftWing.rotation.z = 0.08 + Math.sin(b.walkCycle) * 0.05;
-                    b.duckData.rightWing.rotation.z = -0.08 - Math.sin(b.walkCycle) * 0.05;
+                    // Normal bot yürüyüşünde kanatların sakin salınımı
+                    b.duckData.leftWing.rotation.set(0, 0, 0.08 + Math.sin(b.walkCycle) * 0.05);
+                    b.duckData.rightWing.rotation.set(0, 0, -0.08 - Math.sin(b.walkCycle) * 0.05);
                 }
 
                 const botDistToCenter = Math.hypot(b.group.position.x, b.group.position.z);
