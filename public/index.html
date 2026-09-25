@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DUCK DUCK</title>
+    <!-- Fall Guys / Eğlenceli Arcade Fontu -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Luckiest+Guy&family=Fredoka+One&display=swap" rel="stylesheet">
@@ -489,8 +490,7 @@
             });
         });
 
-        // ================= ÖRDEKLE BİRLİKTE CANLI HAREKET EDEN KOSTÜMLER =================
-        // playerDuckMesh içine bağlandığı için kafa sallandıkça şapka da onunla birlikte dinamik sallanır!
+        // ================= ÖRDEKLE BİRLİKTE CANLI DANS EDEN MİNYATÜR KOSTÜMLER =================
         function createAccessory(type) {
             const accGroup = new THREE.Group();
 
@@ -498,63 +498,74 @@
                 const brownMat = new THREE.MeshStandardMaterial({ color: 0x8b4513, roughness: 0.85 });
                 const bandMat = new THREE.MeshStandardMaterial({ color: 0x3d1c02, roughness: 0.5 });
 
-                const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.38, 0.38, 0.03, 18), brownMat);
-                brim.position.set(0, 0.76, 0.02);
-                brim.rotation.x = -0.10;
+                const brim = new THREE.Mesh(new THREE.CylinderGeometry(0.32, 0.32, 0.02, 18), brownMat);
+                brim.position.set(0, 1.48, 0.12);
+                brim.rotation.x = -0.15;
                 accGroup.add(brim);
 
-                const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.25, 0.22, 16), brownMat);
-                crown.position.set(0, 0.87, 0.01);
-                crown.rotation.x = -0.10;
+                const crown = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.21, 0.18, 16), brownMat);
+                crown.position.set(0, 1.57, 0.11);
+                crown.rotation.x = -0.15;
                 accGroup.add(crown);
 
-                const band = new THREE.Mesh(new THREE.CylinderGeometry(0.26, 0.26, 0.04, 16), bandMat);
-                band.position.set(0, 0.79, 0.02);
-                band.rotation.x = -0.10;
+                const band = new THREE.Mesh(new THREE.CylinderGeometry(0.22, 0.22, 0.04, 16), bandMat);
+                band.position.set(0, 1.50, 0.12);
+                band.rotation.x = -0.15;
                 accGroup.add(band);
             }
             else if (type === "crown") {
-                const goldMat = new THREE.MeshStandardMaterial({ color: 0xffd700, metalness: 0.85, roughness: 0.2 });
-                const baseRing = new THREE.Mesh(new THREE.CylinderGeometry(0.24, 0.24, 0.07, 16), goldMat);
-                baseRing.position.set(0, 0.76, 0.02);
-                baseRing.rotation.x = -0.08;
+                // KRAL TACI: Şık, ince halkalı, mini yakutlu saray tacı
+                const goldMat = new THREE.MeshStandardMaterial({ color: 0xffcc00, metalness: 0.9, roughness: 0.15 });
+                const rubyMat = new THREE.MeshStandardMaterial({ color: 0xd90429, metalness: 0.2, roughness: 0.1 });
+
+                // İnce altın çember taban
+                const baseRing = new THREE.Mesh(new THREE.CylinderGeometry(0.18, 0.18, 0.035, 18), goldMat);
+                baseRing.position.set(0, 1.48, 0.12);
+                baseRing.rotation.x = -0.12;
                 accGroup.add(baseRing);
 
+                // 5 adet sevimli sivri uç ve üstünde kırmızı yakut taşları
                 for (let i = 0; i < 5; i++) {
-                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.06, 0.16, 6), goldMat);
+                    const spike = new THREE.Mesh(new THREE.ConeGeometry(0.04, 0.12, 6), goldMat);
                     const ang = (i / 5) * Math.PI * 2;
-                    spike.position.set(Math.cos(ang) * 0.20, 0.86, Math.sin(ang) * 0.20 + 0.02);
-                    spike.rotation.x = -0.08;
+                    const sx = Math.cos(ang) * 0.15;
+                    const sz = Math.sin(ang) * 0.15 + 0.12;
+                    spike.position.set(sx, 1.56, sz);
+                    spike.rotation.x = -0.12;
                     accGroup.add(spike);
+
+                    const ruby = new THREE.Mesh(new THREE.SphereGeometry(0.02, 6, 6), rubyMat);
+                    ruby.position.set(sx, 1.62, sz);
+                    accGroup.add(ruby);
                 }
             }
             else if (type === "glasses") {
-                const blackMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.2, metalness: 0.5 });
-                const glassMat = new THREE.MeshStandardMaterial({ color: 0x000000, roughness: 0.1 });
+                const blackMat = new THREE.MeshStandardMaterial({ color: 0x111111, roughness: 0.2, metalness: 0.6 });
+                const glassMat = new THREE.MeshStandardMaterial({ color: 0x050505, roughness: 0.1 });
 
-                const frameR = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.11, 0.03), glassMat);
-                frameR.position.set(0.14, 0.62, -0.22);
-                frameR.rotation.y = 0.20;
+                const frameR = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.09, 0.03), glassMat);
+                frameR.position.set(0.12, 1.35, -0.08);
+                frameR.rotation.y = 0.22;
                 accGroup.add(frameR);
 
-                const frameL = new THREE.Mesh(new THREE.BoxGeometry(0.16, 0.11, 0.03), glassMat);
-                frameL.position.set(-0.14, 0.62, -0.22);
-                frameL.rotation.y = -0.20;
+                const frameL = new THREE.Mesh(new THREE.BoxGeometry(0.13, 0.09, 0.03), glassMat);
+                frameL.position.set(-0.12, 1.35, -0.08);
+                frameL.rotation.y = -0.22;
                 accGroup.add(frameL);
 
-                const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.03, 0.02), blackMat);
-                bridge.position.set(0, 0.63, -0.23);
+                const bridge = new THREE.Mesh(new THREE.BoxGeometry(0.08, 0.02, 0.02), blackMat);
+                bridge.position.set(0, 1.36, -0.09);
                 accGroup.add(bridge);
             }
             else if (type === "scarf") {
                 const scarfMat = new THREE.MeshStandardMaterial({ color: 0xd90429, roughness: 0.85 });
-                const scarfRing = new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.08, 12, 24), scarfMat);
+                const scarfRing = new THREE.Mesh(new THREE.TorusGeometry(0.28, 0.065, 12, 24), scarfMat);
                 scarfRing.rotation.x = Math.PI / 2 + 0.15;
-                scarfRing.position.set(0, 0.32, 0.05);
+                scarfRing.position.set(0, 0.95, 0.12);
                 accGroup.add(scarfRing);
 
-                const scarfTail = new THREE.Mesh(new THREE.BoxGeometry(0.12, 0.26, 0.06), scarfMat);
-                scarfTail.position.set(0.18, 0.18, 0.22);
+                const scarfTail = new THREE.Mesh(new THREE.BoxGeometry(0.10, 0.22, 0.05), scarfMat);
+                scarfTail.position.set(0.16, 0.82, 0.25);
                 scarfTail.rotation.set(0.20, 0.25, -0.15);
                 accGroup.add(scarfTail);
             }
@@ -562,13 +573,13 @@
                 const partyMat = new THREE.MeshStandardMaterial({ color: 0x7209b7, roughness: 0.5 });
                 const pomMat = new THREE.MeshStandardMaterial({ color: 0xf72585, roughness: 0.9 });
 
-                const cone = new THREE.Mesh(new THREE.ConeGeometry(0.20, 0.48, 16), partyMat);
-                cone.position.set(0, 0.98, 0.01);
-                cone.rotation.x = -0.10;
+                const cone = new THREE.Mesh(new THREE.ConeGeometry(0.16, 0.38, 16), partyMat);
+                cone.position.set(0, 1.66, 0.12);
+                cone.rotation.x = -0.14;
                 accGroup.add(cone);
 
-                const pompom = new THREE.Mesh(new THREE.DodecahedronGeometry(0.08, 1), pomMat);
-                pompom.position.set(0, 1.25, -0.02);
+                const pompom = new THREE.Mesh(new THREE.DodecahedronGeometry(0.06, 1), pomMat);
+                pompom.position.set(0, 1.86, 0.09);
                 accGroup.add(pompom);
             }
 
@@ -605,7 +616,7 @@
             const mat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
             const sprite = new THREE.Sprite(mat);
             sprite.scale.set(3.4, 0.85, 1);
-            sprite.position.set(0, 2.9, 0);
+            sprite.position.set(0, 3.2, 0); // Tacın hizasından ferahça yukarıda durur
             return sprite;
         }
 
@@ -621,7 +632,7 @@
 
             playerGroup.add(createNameTag(myUsername));
 
-            // Şapkayı doğrudan gövdeye ekliyoruz ki onunla birlikte hareket etsin!
+            // Şapkayı doğrudan gövdeye ekliyoruz ki animasyonla birlikte dans etsin!
             if (selectedHat !== "none" && playerDuckMesh) {
                 playerDuckMesh.add(createAccessory(selectedHat));
             }
@@ -967,7 +978,7 @@
             playerDuckMesh.position.y = hipHeight;
             playerGroup.add(playerDuckMesh);
 
-            // Başlangıçta seçilen kostümü ördek gövdesine ekle
+            // Başlangıçta seçilen kostümü gövdeye tak
             if (isGameStarted && selectedHat !== "none") {
                 playerDuckMesh.add(createAccessory(selectedHat));
             }
