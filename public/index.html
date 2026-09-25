@@ -432,9 +432,9 @@
                 🕹️ <b>W / S:</b> İleri / Geri Yürü<br>
                 🔄 <b>A / D:</b> Yumuşakça Yönel<br>
                 ⚡ <b>Shift:</b> Hızlı Koş (Depar)<br>
-                🍑 <b>Q:</b> Popo Salla & Kanat Çırp (Twerk & Wings)<br>
-                💥 <b>E:</b> Botlara Gaga At / Sataş!<br>
-                🐥 <b>Space:</b> Lastik Ördek Fırlat (2 Coin = 1 Ördek)
+                🍑 <b>Q:</b> Popo Salla & Neşeli Kanat Çırp<br>
+                🪶 <b>E / F:</b> Kanat Savur & Tartış ("Vak Vak!")<br>
+                🐥 <b>Space:</b> Lastik Ördek Fırlat
             </div>
             <button id="close-help-button" class="close-help-btn">ANLADIM!</button>
         </div>
@@ -459,7 +459,7 @@
     </div>
 
     <div id="controls-hint" class="arcade-pill">
-        🎮 <b>W/S:</b> İleri / Geri | <b>A/D:</b> Yönel | <b>Q:</b> Popo Salla & Kanat Çırp | <b>Space:</b> Fırlat | <b>E:</b> Gaga At
+        🎮 <b>W/S:</b> Yürü | <b>A/D:</b> Yönel | <b>Q:</b> Popo Salla | <b>E:</b> Kanatla Tartış ("Vak?!") | <b>Space:</b> Lastik Ördek
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -489,7 +489,6 @@
             });
         });
 
-        // 1. Sahne, Gökyüzü ve Işıklandırma
         const scene = new THREE.Scene();
         scene.background = new THREE.Color(0xa0e7ff);
         scene.fog = new THREE.FogExp2(0xa0e7ff, 0.007);
@@ -511,7 +510,7 @@
         sunLight.shadow.mapSize.height = 2048;
         scene.add(sunLight);
 
-        // ================= PROCEDURAL VE KANATLARI AÇILAN KUSURSUZ ÖRDEK MODELİ =================
+        // ================= KANATLARI AÇILAN VE TARTIŞABİLEN ÖRDEK MODELİ =================
         const duckFeatherMat = new THREE.MeshStandardMaterial({ 
             color: 0xffffff, 
             roughness: 0.45,
@@ -527,37 +526,31 @@
         function buildArticulatedDuck() {
             const root = new THREE.Group();
 
-            // Gövde (Tombul sevimli ördek formu)
             const body = new THREE.Mesh(new THREE.SphereGeometry(0.85, 24, 20), duckFeatherMat);
             body.scale.set(1.0, 0.92, 1.25);
             body.castShadow = true;
             root.add(body);
 
-            // Kuyruk
             const tail = new THREE.Mesh(new THREE.ConeGeometry(0.28, 0.48, 12), duckFeatherMat);
             tail.position.set(0, 0.32, 0.95);
             tail.rotation.x = Math.PI / 3.2;
             tail.castShadow = true;
             root.add(tail);
 
-            // Baş ve Boyun Grubu (Kafa sallama / gaga atma için pivot)
             const headGroup = new THREE.Group();
             headGroup.position.set(0, 0.52, -0.48);
             root.add(headGroup);
 
-            // Baş küresi
             const head = new THREE.Mesh(new THREE.SphereGeometry(0.52, 22, 18), duckFeatherMat);
             head.castShadow = true;
             headGroup.add(head);
 
-            // Gaga
             const beak = new THREE.Mesh(new THREE.BoxGeometry(0.38, 0.14, 0.44), duckBeakMat);
             beak.position.set(0, -0.08, -0.52);
             beak.rotation.x = 0.05;
             beak.castShadow = true;
             headGroup.add(beak);
 
-            // Sevimli Gözler (Sağ ve Sol)
             function createEye(side) {
                 const eyeGroup = new THREE.Group();
                 const eyeBase = new THREE.Mesh(new THREE.SphereGeometry(0.11, 12, 12), duckEyeMat);
@@ -575,26 +568,23 @@
             headGroup.add(createEye(1));
             headGroup.add(createEye(-1));
 
-            // AKSESUAR ANCHOR (Şapkalar doğrudan kafa üst noktasına oturur)
+            // Şapkaların ve aksesuarların kilitlendiği anchor noktaları
             const hatAnchor = new THREE.Group();
             hatAnchor.position.set(0, 0.50, -0.04);
             headGroup.add(hatAnchor);
 
-            // Gözlük Anchor (Tam göz hizası)
             const glassesAnchor = new THREE.Group();
             glassesAnchor.position.set(0, 0.12, -0.42);
             headGroup.add(glassesAnchor);
 
-            // Atkı Anchor (Boyun boğumu)
             const scarfAnchor = new THREE.Group();
             scarfAnchor.position.set(0, 0.22, -0.35);
             root.add(scarfAnchor);
 
-            // ================= BAĞIMSIZ HAREKETLİ KANATLAR (WINGS) =================
+            // ================= HAREKETLİ VE TARTIŞAN KANATLAR =================
             function createWing(isRight) {
                 const wingPivot = new THREE.Group();
                 const side = isRight ? 1 : -1;
-                // Omuz bağlantı noktası
                 wingPivot.position.set(0.74 * side, 0.15, -0.05);
 
                 const wingGeo = new THREE.BoxGeometry(0.12, 0.55, 0.85);
@@ -623,7 +613,7 @@
             };
         }
 
-        // ================= KAFANIN ANCHOR NOKTALARINA MİLİMETRİK OTURAN KOSTÜMLER =================
+        // ================= KUSURSUZ MİNYATÜR KOSTÜMLER =================
         function createAccessory(type) {
             const acc = new THREE.Group();
 
@@ -646,7 +636,6 @@
                 acc.add(band);
             }
             else if (type === "crown") {
-                // Şık, pırıl pırıl altın saray tacı
                 const goldMat = new THREE.MeshStandardMaterial({ color: 0xffcc00, metalness: 0.9, roughness: 0.15 });
                 const rubyMat = new THREE.MeshStandardMaterial({ color: 0xd90429, metalness: 0.2, roughness: 0.1 });
 
@@ -712,6 +701,53 @@
             }
 
             return acc;
+        }
+
+        // ================= TARTIŞMA VE KONUŞMA BALONCUĞU SİSTEMİ =================
+        let chatBubbles = [];
+        const quackPhrases = ["VAK?!", "VAAK VAK!", "NE DİYON BE?!", "BURASI BENİM!", "HOOP BAKALIM!", "VAK SENİİ!"];
+
+        function spawnQuackBubble(parentGroup, customText = null) {
+            const text = customText || quackPhrases[Math.floor(Math.random() * quackPhrases.length)];
+            const canvas = document.createElement("canvas");
+            canvas.width = 256;
+            canvas.height = 96;
+            const ctx = canvas.getContext("2d");
+
+            // Çizgi film konuşma balonu
+            ctx.fillStyle = "#ffffff";
+            ctx.strokeStyle = "#ff5964";
+            ctx.lineWidth = 6;
+
+            ctx.beginPath();
+            if (ctx.roundRect) ctx.roundRect(10, 10, 236, 65, 20);
+            else ctx.rect(10, 10, 236, 65);
+            ctx.fill();
+            ctx.stroke();
+
+            // Balon kuyruğu
+            ctx.beginPath();
+            ctx.moveTo(110, 75);
+            ctx.lineTo(128, 92);
+            ctx.lineTo(146, 75);
+            ctx.fillStyle = "#ffffff";
+            ctx.fill();
+
+            // Metin
+            ctx.font = "bold 26px 'Luckiest Guy', sans-serif";
+            ctx.fillStyle = "#e63946";
+            ctx.textAlign = "center";
+            ctx.textBaseline = "middle";
+            ctx.fillText(text, 128, 42);
+
+            const texture = new THREE.CanvasTexture(canvas);
+            const mat = new THREE.SpriteMaterial({ map: texture, depthTest: false });
+            const sprite = new THREE.Sprite(mat);
+            sprite.scale.set(2.8, 1.05, 1);
+            sprite.position.set((Math.random() - 0.5) * 0.4, 3.2, 0);
+
+            parentGroup.add(sprite);
+            chatBubbles.push({ sprite: sprite, parent: parentGroup, life: 75 });
         }
 
         // 2. Çimenlik Zemin
@@ -925,7 +961,6 @@
         playerRightFoot.position.set(legSpacingX, hipHeight, 0);
         playerGroup.add(playerRightFoot);
 
-        // Kendi hareketli ördeğimizi oluşturup bağlayalım
         const playerDuckData = buildArticulatedDuck();
         const playerDuckMesh = playerDuckData.root;
         playerDuckMesh.position.y = hipHeight;
@@ -944,7 +979,6 @@
             }
         }
 
-        // ================= 3D İSİM ETİKETİ =================
         function createNameTag(name) {
             const canvas = document.createElement("canvas");
             canvas.width = 256;
@@ -953,11 +987,8 @@
 
             ctx.fillStyle = "rgba(0, 0, 0, 0.65)";
             ctx.beginPath();
-            if (ctx.roundRect) {
-                ctx.roundRect(8, 8, 240, 48, 14);
-            } else {
-                ctx.rect(8, 8, 240, 48);
-            }
+            if (ctx.roundRect) ctx.roundRect(8, 8, 240, 48, 14);
+            else ctx.rect(8, 8, 240, 48);
             ctx.fill();
 
             ctx.strokeStyle = "#ffde59";
@@ -978,7 +1009,6 @@
             return sprite;
         }
 
-        // ================= SOKET / MULTIPLAYER KURULUMU =================
         const socket = io();
         const otherPlayers = {};
 
@@ -1021,15 +1051,11 @@
 
         socket.on("currentPlayers", (players) => {
             Object.keys(players).forEach((id) => {
-                if (id !== socket.id) {
-                    addOtherPlayer(players[id]);
-                }
+                if (id !== socket.id) addOtherPlayer(players[id]);
             });
         });
 
-        socket.on("newPlayer", (playerInfo) => {
-            addOtherPlayer(playerInfo);
-        });
+        socket.on("newPlayer", (playerInfo) => { addOtherPlayer(playerInfo); });
 
         socket.on("playerMoved", (playerInfo) => {
             if (otherPlayers[playerInfo.id]) {
@@ -1065,18 +1091,10 @@
             if (e.key === "Enter") handleStartGame();
         });
 
-        helpBtn.addEventListener("click", () => {
-            helpModal.classList.add("active");
-        });
-
-        closeHelpBtn.addEventListener("click", () => {
-            helpModal.classList.remove("active");
-        });
-
+        helpBtn.addEventListener("click", () => { helpModal.classList.add("active"); });
+        closeHelpBtn.addEventListener("click", () => { helpModal.classList.remove("active"); });
         helpModal.addEventListener("click", (e) => {
-            if (e.target === helpModal) {
-                helpModal.classList.remove("active");
-            }
+            if (e.target === helpModal) helpModal.classList.remove("active");
         });
 
         let score = 0;
@@ -1097,15 +1115,15 @@
         const danceDuration = 100;
         let wiggleCycle = 0;
 
-        let isPecking = false;
-        let peckTimer = 0;
-        let peckCooldown = 0;
+        let isArguing = false;
+        let argueTimer = 0;
+        let argueCooldown = 0;
+
         let playerKnockbackX = 0;
         let playerKnockbackZ = 0;
         let screenShake = 0;
 
         let playerWalkCycle = 0;
-        let wingFlapCycle = 0;
 
         let droppedCoins = [];
         const coinGeo = new THREE.CylinderGeometry(0.65, 0.65, 0.16, 20);
@@ -1170,7 +1188,6 @@
             metalness: 0.1
         });
         const boxGeometry = new THREE.BoxGeometry(1.85, 1.85, 1.85);
-
         let boxes = [];
 
         function spawnBox() {
@@ -1248,10 +1265,8 @@
                 pushVelocityZ: 0,
                 spinVelocity: 0,
                 isInPondPenalty: false,
-                isAngry: false,
-                revengeTimer: 0,
-                isPeckingBack: false,
-                peckBackTimer: 0,
+                isArguingBack: false,
+                argueBackTimer: 0,
                 hasCoin: true
             });
         }
@@ -1281,37 +1296,45 @@
             }
         }
 
-        function performPeckAttack() {
-            if (!isGameStarted || peckCooldown > 0 || isPecking) return;
+        // ================= KANATLA TARTIŞMA / SATAŞMA HAMLESİ =================
+        function performWingArgue() {
+            if (!isGameStarted || argueCooldown > 0 || isArguing) return;
 
             danceTimer = 0;
-            isPecking = true;
-            peckTimer = 14;
-            peckCooldown = 26;
+            isArguing = true;
+            argueTimer = 24; // 24 frame boyunca hararetli tartışma animasyonu
+            argueCooldown = 32;
+
+            // Kendi kafamızda hemen tartışma baloncuğu aç
+            spawnQuackBubble(playerGroup);
 
             const forwardX = -Math.sin(duckAngle);
             const forwardZ = -Math.cos(duckAngle);
-            const peckReachX = playerGroup.position.x + forwardX * 2.2;
-            const peckReachZ = playerGroup.position.z + forwardZ * 2.2;
+            const reachX = playerGroup.position.x + forwardX * 2.4;
+            const reachZ = playerGroup.position.z + forwardZ * 2.4;
 
             bots.forEach(bot => {
-                const dist = Math.hypot(bot.group.position.x - peckReachX, bot.group.position.z - peckReachZ);
-                if (dist < 2.6) {
+                const dist = Math.hypot(bot.group.position.x - reachX, bot.group.position.z - reachZ);
+                if (dist < 2.8) {
                     const pushDirX = bot.group.position.x - playerGroup.position.x;
                     const pushDirZ = bot.group.position.z - playerGroup.position.z;
                     const len = Math.hypot(pushDirX, pushDirZ) || 1;
 
-                    bot.pushVelocityX = (pushDirX / len) * 1.35;
-                    bot.pushVelocityZ = (pushDirZ / len) * 1.35;
-                    bot.spinVelocity = 0.35;
+                    // Kanatla hafifçe geri itme (şakalaşma)
+                    bot.pushVelocityX = (pushDirX / len) * 1.15;
+                    bot.pushVelocityZ = (pushDirZ / len) * 1.15;
+                    bot.spinVelocity = 0.25;
 
+                    // Bot da geri dönüp kanat çırparak tartışmaya girsin!
+                    bot.isArguingBack = true;
+                    bot.argueBackTimer = 35;
+                    bot.targetAngle = Math.atan2(-pushDirX, -pushDirZ);
+
+                    spawnQuackBubble(bot.group, "VAAK?!!");
+                    spawnFeathers(bot.group.position.x, 1.2, bot.group.position.z);
                     spawnDroppedCoin(bot.group.position.x, 0.8, bot.group.position.z, pushDirX / len, pushDirZ / len);
 
-                    bot.isAngry = true;
-                    bot.revengeTimer = 22;
-
-                    spawnFeathers(bot.group.position.x, 1.2, bot.group.position.z);
-                    score += 25;
+                    score += 35;
                     scoreEl.innerText = score;
                 }
             });
@@ -1380,7 +1403,6 @@
         function updateHUD() {
             let duckText = rubberDuckCount > 0 ? `🐥 x${rubberDuckCount}` : `🐥 x0`;
             let coinText = `🪙 ${coinCount}/2 Coin`;
-
             ammoEl.innerText = `${duckText} | ${coinText}`;
             ammoEl.style.color = rubberDuckCount > 0 ? "#ffd166" : "#118ab2";
         }
@@ -1408,9 +1430,6 @@
                 life: 120
             });
 
-            // Fırlatma anında kanatları hevesle iki yana açıp çırpsın
-            wingFlapCycle += 2.0;
-
             rubberDuckCount--;
             updateHUD();
         }
@@ -1421,7 +1440,7 @@
 
             if (e.code === "Space") { e.preventDefault(); throwRubberDuck(); }
             if (e.key === "Shift" || e.code === "ShiftLeft") isSprinting = true;
-            if (e.key === "e" || e.key === "E") performPeckAttack();
+            if (e.key === "e" || e.key === "E" || e.key === "f" || e.key === "F") performWingArgue();
             
             if (e.key === "q" || e.key === "Q") {
                 danceTimer = danceDuration;
@@ -1449,15 +1468,34 @@
                 if (c.position.x > arenaSize / 2 + 20) c.position.x = -arenaSize / 2 - 20;
             });
 
-            if (peckCooldown > 0) peckCooldown--;
-            if (isPecking) {
-                peckTimer--;
-                playerDuckMesh.position.z = THREE.MathUtils.lerp(playerDuckMesh.position.z, -0.65, 0.4);
-                playerDuckData.headGroup.rotation.x = THREE.MathUtils.lerp(playerDuckData.headGroup.rotation.x, 0.65, 0.4);
-                if (peckTimer <= 0) isPecking = false;
-            } else if (danceTimer <= 0) {
-                playerDuckMesh.position.z = THREE.MathUtils.lerp(playerDuckMesh.position.z, 0, 0.2);
-                playerDuckData.headGroup.rotation.x = THREE.MathUtils.lerp(playerDuckData.headGroup.rotation.x, 0, 0.2);
+            // Konuşma baloncuklarını yukarı doğru hafif süzdür ve söndür
+            for (let i = chatBubbles.length - 1; i >= 0; i--) {
+                const cb = chatBubbles[i];
+                cb.sprite.position.y += 0.015;
+                cb.life--;
+                if (cb.life <= 0) {
+                    cb.parent.remove(cb.sprite);
+                    chatBubbles.splice(i, 1);
+                }
+            }
+
+            if (argueCooldown > 0) argueCooldown--;
+
+            // ================= TARTIŞMA ANİMASYONU (KANAT SAVURMA VE KAFA SALLAMA) =================
+            if (isArguing) {
+                argueTimer--;
+                const arguePhase = Math.sin(argueTimer * 0.8);
+
+                // Tek kanat belinde, sağ kanat öne doğru savrularak laf anlatıyor
+                playerDuckData.leftWing.rotation.set(0.4, 0, 0.45); // Sol kanat belde
+                playerDuckData.rightWing.rotation.set(-0.6 + arguePhase * 0.5, 0.3, -0.6); // Sağ kanat hararetle savruluyor
+                playerDuckData.headGroup.rotation.x = arguePhase * 0.25; // Kafa "vak vak" diye sallanıyor
+                playerDuckMesh.rotation.y = duckAngle + arguePhase * 0.15; // Gövde hafifçe atışıyor
+
+                if (argueTimer <= 0) {
+                    isArguing = false;
+                    playerDuckData.headGroup.rotation.x = 0;
+                }
             }
 
             let forwardInput = 0;
@@ -1516,9 +1554,7 @@
             const inPond = Math.hypot(playerGroup.position.x, playerGroup.position.z) < pondRadius - 1.0;
             const targetBaseY = inPond ? 0.28 : hipHeight;
 
-            // ==============================================================
-            // GELİŞMİŞ POPO SALLAMA + NEŞELİ KANAT ÇIRPMA (Q TUŞU)
-            // ==============================================================
+            // ================= GELİŞMİŞ POPO SALLAMA + NEŞELİ KANAT ÇIRPMA =================
             if (danceTimer > 0) {
                 danceTimer--;
                 wiggleCycle += 0.35;
@@ -1531,24 +1567,21 @@
                 playerLeftFoot.position.y = hipHeight - bobHeight * 0.3;
                 playerRightFoot.position.y = hipHeight - bobHeight * 0.3;
 
-                // Gövde hem yana hem aşağı yukarı yaylanır
                 playerDuckMesh.rotation.y = Math.sin(wiggleCycle) * 0.28;
                 playerDuckMesh.rotation.z = Math.cos(wiggleCycle) * 0.12;
                 playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, bobPitch, 0.3);
                 playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY + bobHeight, 0.3);
 
-                // KANATLAR İKİ YANA AÇILIP ÇIRPINIR!
-                const wingFlap = Math.sin(wiggleCycle * 2.4) * 0.65 + 0.45;
-                playerDuckData.leftWing.rotation.z = wingFlap;
-                playerDuckData.rightWing.rotation.z = -wingFlap;
-                playerDuckData.leftWing.rotation.x = Math.sin(wiggleCycle) * 0.25;
-                playerDuckData.rightWing.rotation.x = Math.sin(wiggleCycle) * 0.25;
+                // Dans ederken iki kanat da neşeyle çırpınır
+                if (!isArguing) {
+                    const wingFlap = Math.sin(wiggleCycle * 2.4) * 0.65 + 0.45;
+                    playerDuckData.leftWing.rotation.z = wingFlap;
+                    playerDuckData.rightWing.rotation.z = -wingFlap;
+                }
 
                 footShadow.scale.setScalar(1.0 + bobHeight * 0.5);
             } 
-            // ==============================================================
-            // SAKİN VE DENGELİ PAYTAK YÜRÜYÜŞ + KANAT SALINIMI
-            // ==============================================================
+            // ================= SAKİN VE DENGELİ PAYTAK YÜRÜYÜŞ =================
             else if (isMoving) {
                 wiggleCycle = 0;
                 const stepSpeed = isSprinting ? 0.18 : 0.11;
@@ -1561,21 +1594,18 @@
                 playerLeftFoot.position.y = hipHeight + Math.max(0, Math.sin(playerWalkCycle)) * 0.10;
                 playerRightFoot.position.y = hipHeight + Math.max(0, -Math.sin(playerWalkCycle)) * 0.10;
 
-                if (!isPecking) {
-                    const waddleAngle = Math.sin(playerWalkCycle) * (isSprinting ? 0.18 : 0.12);
-                    playerDuckMesh.rotation.z = THREE.MathUtils.lerp(playerDuckMesh.rotation.z, waddleAngle + bodyRoll, 0.25);
-                    playerDuckMesh.rotation.y = 0;
-                    playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, (isSprinting ? 0.16 : 0.06), 0.25);
-                    playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY + Math.abs(Math.sin(playerWalkCycle)) * 0.08, 0.25);
-                }
+                const waddleAngle = Math.sin(playerWalkCycle) * (isSprinting ? 0.18 : 0.12);
+                playerDuckMesh.rotation.z = THREE.MathUtils.lerp(playerDuckMesh.rotation.z, waddleAngle + bodyRoll, 0.25);
+                playerDuckMesh.rotation.y = 0;
+                playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, (isSprinting ? 0.16 : 0.06), 0.25);
+                playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY + Math.abs(Math.sin(playerWalkCycle)) * 0.08, 0.25);
 
-                // Koşarken kanatlar hafifçe yana açılır ve rüzgarla hafif salınır
-                const runWingSpread = isSprinting ? 0.35 : 0.12;
-                const wingSway = Math.sin(playerWalkCycle * 1.4) * (isSprinting ? 0.18 : 0.06);
-                playerDuckData.leftWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.z, runWingSpread + wingSway, 0.2);
-                playerDuckData.rightWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.z, -runWingSpread - wingSway, 0.2);
-                playerDuckData.leftWing.rotation.x = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.x, 0.1, 0.2);
-                playerDuckData.rightWing.rotation.x = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.x, 0.1, 0.2);
+                if (!isArguing) {
+                    const runWingSpread = isSprinting ? 0.35 : 0.12;
+                    const wingSway = Math.sin(playerWalkCycle * 1.4) * (isSprinting ? 0.18 : 0.06);
+                    playerDuckData.leftWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.z, runWingSpread + wingSway, 0.2);
+                    playerDuckData.rightWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.z, -runWingSpread - wingSway, 0.2);
+                }
 
                 footShadow.scale.setScalar(1.0 - Math.abs(Math.sin(playerWalkCycle)) * 0.08);
             } else {
@@ -1585,18 +1615,15 @@
                 playerLeftFoot.position.y = THREE.MathUtils.lerp(playerLeftFoot.position.y, hipHeight, 0.25);
                 playerRightFoot.position.y = THREE.MathUtils.lerp(playerRightFoot.position.y, hipHeight, 0.25);
 
-                if (!isPecking) {
-                    playerDuckMesh.rotation.z = THREE.MathUtils.lerp(playerDuckMesh.rotation.z, bodyRoll, 0.25);
-                    playerDuckMesh.rotation.y = THREE.MathUtils.lerp(playerDuckMesh.rotation.y, 0, 0.25);
-                    playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, 0, 0.25);
-                    playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY, 0.25);
-                }
+                playerDuckMesh.rotation.z = THREE.MathUtils.lerp(playerDuckMesh.rotation.z, bodyRoll, 0.25);
+                playerDuckMesh.rotation.y = THREE.MathUtils.lerp(playerDuckMesh.rotation.y, 0, 0.25);
+                playerDuckMesh.rotation.x = THREE.MathUtils.lerp(playerDuckMesh.rotation.x, 0, 0.25);
+                playerDuckMesh.position.y = THREE.MathUtils.lerp(playerDuckMesh.position.y, targetBaseY, 0.25);
 
-                // Dururken kanatlar gövdeye düzgünce kapanır
-                playerDuckData.leftWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.z, 0.05, 0.15);
-                playerDuckData.rightWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.z, -0.05, 0.15);
-                playerDuckData.leftWing.rotation.x = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.x, 0, 0.15);
-                playerDuckData.rightWing.rotation.x = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.x, 0, 0.15);
+                if (!isArguing) {
+                    playerDuckData.leftWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.leftWing.rotation.z, 0.05, 0.15);
+                    playerDuckData.rightWing.rotation.z = THREE.MathUtils.lerp(playerDuckData.rightWing.rotation.z, -0.05, 0.15);
+                }
 
                 footShadow.scale.setScalar(1.0);
             }
@@ -1758,6 +1785,7 @@
                 }
             }
 
+            // ================= BOT DAVRANIŞLARI VE KARŞILIKLI TARTIŞMA =================
             bots.forEach(b => {
                 const botInPond = Math.hypot(b.group.position.x, b.group.position.z) < pondRadius - 1.0;
                 const botTargetBaseY = botInPond ? 0.28 : hipHeight;
@@ -1771,58 +1799,20 @@
                     b.group.rotation.y += b.spinVelocity;
                     b.spinVelocity *= 0.9;
                 } 
-                else if (b.isAngry && isGameStarted) {
-                    b.revengeTimer--;
+                else if (b.isArguingBack) {
+                    // Bot da sana karşı kanatlarını çırpıp laf yetiştiriyor!
+                    b.argueBackTimer--;
+                    const botArguePhase = Math.sin(b.argueBackTimer * 0.9);
+                    
+                    b.duckData.leftWing.rotation.z = 0.5 + botArguePhase * 0.4;
+                    b.duckData.rightWing.rotation.z = -0.5 - botArguePhase * 0.4;
+                    b.duckData.headGroup.rotation.x = botArguePhase * 0.3;
 
-                    const toPlayerX = playerGroup.position.x - b.group.position.x;
-                    const toPlayerZ = playerGroup.position.z - b.group.position.z;
-                    const distToPlayer = Math.hypot(toPlayerX, toPlayerZ);
-
-                    b.angle = Math.atan2(-toPlayerX, -toPlayerZ);
-                    b.group.rotation.y = b.angle;
-
-                    if (distToPlayer > 2.2) {
-                        b.group.position.x -= Math.sin(b.angle) * (b.speed * 2.3);
-                        b.group.position.z -= Math.cos(b.angle) * (b.speed * 2.3);
-
-                        b.walkCycle += 0.22;
-                        const bLegSwing = Math.sin(b.walkCycle) * 0.65;
-                        b.leftFoot.rotation.x = bLegSwing;
-                        b.rightFoot.rotation.x = -bLegSwing;
-
-                        b.leftFoot.position.y = hipHeight + Math.max(0, Math.sin(b.walkCycle)) * 0.12;
-                        b.rightFoot.position.y = hipHeight + Math.max(0, -Math.sin(b.walkCycle)) * 0.12;
-
-                        b.duckData.root.rotation.z = Math.sin(b.walkCycle) * 0.18;
-                        b.duckData.root.position.y = botTargetBaseY + Math.abs(Math.sin(b.walkCycle)) * 0.09;
-
-                        b.duckData.leftWing.rotation.z = 0.35 + Math.sin(b.walkCycle * 2) * 0.2;
-                        b.duckData.rightWing.rotation.z = -0.35 - Math.sin(b.walkCycle * 2) * 0.2;
-                    } else {
-                        b.isPeckingBack = true;
-                        b.peckBackTimer = 12;
-                        b.isAngry = false;
-
-                        const len = distToPlayer || 1;
-                        playerKnockbackX = (toPlayerX / len) * 1.4;
-                        playerKnockbackZ = (toPlayerZ / len) * 1.4;
-                        screenShake = 0.55;
-
-                        if (coinCount > 0) {
-                            coinCount--;
-                            spawnDroppedCoin(playerGroup.position.x, 1.0, playerGroup.position.z, -toPlayerX / len, -toPlayerZ / len);
-                        } else if (rubberDuckCount > 0) {
-                            rubberDuckCount--;
-                            coinCount = 1;
-                            spawnDroppedCoin(playerGroup.position.x, 1.0, playerGroup.position.z, -toPlayerX / len, -toPlayerZ / len);
-                        }
-                        updateHUD();
-
-                        spawnFeathers(playerGroup.position.x, 1.2, playerGroup.position.z);
+                    if (b.argueBackTimer <= 0) {
+                        b.isArguingBack = false;
+                        b.duckData.headGroup.rotation.x = 0;
                     }
-
-                    if (b.revengeTimer <= -80) b.isAngry = false;
-                } 
+                }
                 else {
                     b.changeDirectionTimer++;
                     if (b.changeDirectionTimer > 120) {
@@ -1852,16 +1842,6 @@
 
                     b.duckData.leftWing.rotation.z = 0.08 + Math.sin(b.walkCycle) * 0.05;
                     b.duckData.rightWing.rotation.z = -0.08 - Math.sin(b.walkCycle) * 0.05;
-                }
-
-                if (b.isPeckingBack) {
-                    b.peckBackTimer--;
-                    b.duckData.root.position.z = THREE.MathUtils.lerp(b.duckData.root.position.z, -0.65, 0.4);
-                    b.duckData.headGroup.rotation.x = THREE.MathUtils.lerp(b.duckData.headGroup.rotation.x, 0.65, 0.4);
-                    if (b.peckBackTimer <= 0) b.isPeckingBack = false;
-                } else if (!b.isAngry) {
-                    b.duckData.root.position.z = THREE.MathUtils.lerp(b.duckData.root.position.z, 0, 0.2);
-                    b.duckData.headGroup.rotation.x = THREE.MathUtils.lerp(b.duckData.headGroup.rotation.x, 0, 0.2);
                 }
 
                 const botDistToCenter = Math.hypot(b.group.position.x, b.group.position.z);
